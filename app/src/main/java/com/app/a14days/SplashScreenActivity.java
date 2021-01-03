@@ -23,11 +23,14 @@ public class SplashScreenActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplication(), MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
             return;
 
         } else {
             Intent intent = new Intent(getApplication(), ChooseLoginRegistrationActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
             return;
 
         }
