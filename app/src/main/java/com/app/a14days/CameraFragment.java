@@ -16,12 +16,19 @@ import androidx.fragment.app.Fragment;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.Result;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CameraFragment extends Fragment {
 
     private CodeScanner mCodeScanner;
     private TextView mTextView;
+    FirebaseAuth mAuth;
 
 
     public static CameraFragment newInstance() {
@@ -44,6 +51,18 @@ public class CameraFragment extends Fragment {
                     public void run() {
                         Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
                         mTextView.setText(result.getText());
+
+//                        mAuth = FirebaseAuth.getInstance();
+//                        String userID = mAuth.getCurrentUser().getUid();
+//                        DatabaseReference currentUserDBcontact = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("contact");
+//                        DatabaseReference detectedUserDB = FirebaseDatabase.getInstance().getReference().child("users").child(result.getText());
+//
+//                        Map userInfo = new HashMap<>();
+//                        userInfo.put("email", email);
+//                        userInfo.put("name", name);
+//                        userInfo.put("ProfileImage",  "default");
+//
+//                        currentUserDBcontact.updateChildren(userInfo);
                     }
                 });
             }
