@@ -1,12 +1,14 @@
 package com.app.a14days;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,6 +37,7 @@ public class ContactFragment extends Fragment {
     ArrayList<String> contactList = new ArrayList<String>();;
 
     private RecyclerView mRecyclerView;
+    private Button addContactManually;
 
     public static ContactFragment newInstance() {
         ContactFragment fragment = new ContactFragment();
@@ -69,11 +72,17 @@ public class ContactFragment extends Fragment {
             }
         });
 
+        addContactManually = view.findViewById(R.id.AddManualContactButton);
+        addContactManually.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddContactManuallyActivity.class);
+                startActivity(intent);
+                return;
+            }
+        });
 
         return view;
     }
 
-    private void AddData() {
-        contactName.setText(contactList.toString());
-    }
 }
