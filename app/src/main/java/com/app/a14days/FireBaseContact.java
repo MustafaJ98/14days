@@ -22,8 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FireBaseContact {
-    private String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+    private String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    String userID;
     DatabaseReference currentUserDB;
     DatabaseReference contact;
     DatabaseReference users;
@@ -32,7 +33,7 @@ public class FireBaseContact {
 
     public FireBaseContact() {
         mAuth = FirebaseAuth.getInstance();
-        String userID = mAuth.getCurrentUser().getUid();
+        userID = mAuth.getCurrentUser().getUid();
         users = FirebaseDatabase.getInstance().getReference().child("users");
         currentUserDB = users.child(userID);
         contact = currentUserDB.child("contact");
@@ -79,11 +80,29 @@ public class FireBaseContact {
                         Log.i("hashMap", singleSearch.toString());
 
                         DatabaseReference hostAddContactHere = contact.child(singleKey);
-                        Map userInfo = new HashMap<>();
-                        userInfo.put("contactName", singleSearch.get("name"));
-                        userInfo.put("contactDate",  new Date().toString());
-                        hostAddContactHere.updateChildren(userInfo);
+                        Map contactInfo = new HashMap<>();
+                        contactInfo.put("contactName", singleSearch.get("name"));
+                        contactInfo.put("contactDate",  new Date().toString());
+                        hostAddContactHere.updateChildren(contactInfo);
 
+
+                        currentUserDB.child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                DatabaseReference contactAddHostHere = users.child(singleKey).child("contact").child(userID);
+                                Map userInfo = new HashMap<>();
+                                userInfo.put("contactName", snapshot.getValue(String.class));
+                                userInfo.put("contactDate",  new Date().toString());
+                                contactAddHostHere.updateChildren(userInfo);
+
+                                Log.i("User Name" , snapshot.getValue(String.class));
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
 
                     }
                 }
