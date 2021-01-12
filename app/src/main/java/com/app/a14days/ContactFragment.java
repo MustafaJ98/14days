@@ -68,16 +68,6 @@ public class ContactFragment extends Fragment {
 
             }
         });
-        //Get contact from FireBase
-//        mAuth = FirebaseAuth.getInstance();
-//        String userID = mAuth.getCurrentUser().getUid();
-//        currentUserDB = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
-//        contact = currentUserDB.child("contact");
-
-        //readContact();
-
-//        contactName = view.findViewById(R.id.cardName);
-//        AddData();
 
 
         return view;

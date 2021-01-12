@@ -1,10 +1,13 @@
 package com.app.a14days;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,12 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.Result;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CameraFragment extends Fragment {
 
     private CodeScanner mCodeScanner;
-    private TextView mTextView;
+    private Button mTextView;
     FirebaseAuth mAuth;
 
 
@@ -41,6 +45,8 @@ public class CameraFragment extends Fragment {
         final Activity activity = getActivity();
         View root = inflater.inflate(R.layout.fragment_camera, container, false);
         CodeScannerView scannerView = root.findViewById(R.id.scanner_view);
+
+        mAuth = FirebaseAuth.getInstance();
         mTextView = root.findViewById(R.id.qrResult);
         mCodeScanner = new CodeScanner(activity, scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
@@ -50,19 +56,18 @@ public class CameraFragment extends Fragment {
                     @Override
                     public void run() {
                         Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
-                        mTextView.setText(result.getText());
+                        mTextView.setVisibility(View.VISIBLE);
 
-//                        mAuth = FirebaseAuth.getInstance();
-//                        String userID = mAuth.getCurrentUser().getUid();
-//                        DatabaseReference currentUserDBcontact = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("contact");
-//                        DatabaseReference detectedUserDB = FirebaseDatabase.getInstance().getReference().child("users").child(result.getText());
-//
-//                        Map userInfo = new HashMap<>();
-//                        userInfo.put("email", email);
-//                        userInfo.put("name", name);
-//                        userInfo.put("ProfileImage",  "default");
-//
-//                        currentUserDBcontact.updateChildren(userInfo);
+                        mTextView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                addNewContact(result.getText());
+                                mTextView.setVisibility(View.INVISIBLE);
+                                mCodeScanner.startPreview();
+                                Toast.makeText(activity, "Added to contact", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     }
                 });
             }
@@ -70,10 +75,31 @@ public class CameraFragment extends Fragment {
         scannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mTextView.setVisibility(View.INVISIBLE);
                 mCodeScanner.startPreview();
             }
         });
         return root;
+    }
+
+    private void addNewContact(String text) {
+        FireBaseContact fbContact = new FireBaseContact();
+        fbContact.readAndAddSingleContact(text);
+//        String userID = mAuth.getCurrentUser().getUid();
+//        DatabaseReference currentUserDB = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("contact").child(singleKey);
+//
+//        Toast.makeText(getActivity(), (singleKey + " Hi"), Toast.LENGTH_SHORT).show();
+//        Log.i("test", (singleKey + "HI"));
+//        Map userInfo = new HashMap<>();
+//        userInfo.put("contactName", contact);
+//        userInfo.put("contactDate", contact);
+//
+//        currentUserDB.updateChildren(userInfo);
+//
+//        Intent intent = new Intent(getActivity(), MainActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//        return;
     }
 
     @Override

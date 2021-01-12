@@ -1,6 +1,9 @@
 package com.app.a14days;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,18 +15,26 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class FireBaseContact {
+    private String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
     DatabaseReference currentUserDB;
     DatabaseReference contact;
+    DatabaseReference users;
     FirebaseAuth mAuth;
     ArrayList<Contact> contactList = new ArrayList<Contact>();
 
     public FireBaseContact() {
         mAuth = FirebaseAuth.getInstance();
         String userID = mAuth.getCurrentUser().getUid();
-        currentUserDB = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
+        users = FirebaseDatabase.getInstance().getReference().child("users");
+        currentUserDB = users.child(userID);
         contact = currentUserDB.child("contact");
     }
 
@@ -53,6 +64,37 @@ public class FireBaseContact {
                 Log.e("Contact", error.toString());
             }
         });
+    }
+
+    public void readAndAddSingleContact(String query) {
+        users.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for ( DataSnapshot KeyNode: snapshot.getChildren() ){
+                    if( KeyNode.getKey().equals(query) ){
+                        String singleKey = KeyNode.getKey();
+                        Log.i("keys", singleKey);
+                        Log.i("Date", new Date().toString());
+                        HashMap singleSearch = (HashMap) KeyNode.getValue();
+                        Log.i("hashMap", singleSearch.toString());
+
+                        DatabaseReference hostAddContactHere = contact.child(singleKey);
+                        Map userInfo = new HashMap<>();
+                        userInfo.put("contactName", singleSearch.get("name"));
+                        userInfo.put("contactDate",  new Date().toString());
+                        hostAddContactHere.updateChildren(userInfo);
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Contact", error.toString());
+            }
+        });
+
     }
 
 }
