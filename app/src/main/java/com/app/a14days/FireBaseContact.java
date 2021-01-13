@@ -73,11 +73,9 @@ public class FireBaseContact {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for ( DataSnapshot KeyNode: snapshot.getChildren() ){
                     if( KeyNode.getKey().equals(query) ){
+
                         String singleKey = KeyNode.getKey();
-                        Log.i("keys", singleKey);
-                        Log.i("Date", new Date().toString());
                         HashMap singleSearch = (HashMap) KeyNode.getValue();
-                        Log.i("hashMap", singleSearch.toString());
 
                         DatabaseReference hostAddContactHere = contact.child(singleKey);
                         Map contactInfo = new HashMap<>();

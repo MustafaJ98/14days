@@ -28,6 +28,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.app.a14days.Timer_14days.deleteOverdueContact;
+
 public class ContactFragment extends Fragment {
 
     private TextView contactName;
@@ -48,7 +50,7 @@ public class ContactFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
-
+        deleteOverdueContact();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.RecyclerViewContact);
         new FireBaseContact().readContact(new FireBaseContact.DataStatus() {
             @Override

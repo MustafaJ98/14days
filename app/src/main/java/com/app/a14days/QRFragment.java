@@ -95,7 +95,6 @@ public class QRFragment extends Fragment {
         qrgEncoder.setColorWhite(Color.WHITE);
         // Getting QR-Code as Bitmap
         Bitmap bitmap = qrgEncoder.getBitmap();
-        Log.e("QR", bitmap.toString());
         return bitmap;
     }
 

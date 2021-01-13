@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import static com.app.a14days.Timer_14days.calculateRemainingTime;
+
 public class RecyclerView_Config {
     private Context myContext;
     private ContactAdapter mContactAdapter;
@@ -41,7 +43,7 @@ public class RecyclerView_Config {
         public void bind(Contact contact, String key){
             myContactName.setText(contact.getContactName());
             myContactDate.setText(contact.getContactDate());
-            String remainingDays = calculateRemainingDays();
+            String remainingDays = calculateRemainingTime(contact.getContactDate());
             myRemainingDays.setText(remainingDays);
             this.key = key;
         }

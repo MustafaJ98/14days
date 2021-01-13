@@ -85,21 +85,6 @@ public class CameraFragment extends Fragment {
     private void addNewContact(String text) {
         FireBaseContact fbContact = new FireBaseContact();
         fbContact.readAndAddSingleContact(text);
-//        String userID = mAuth.getCurrentUser().getUid();
-//        DatabaseReference currentUserDB = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("contact").child(singleKey);
-//
-//        Toast.makeText(getActivity(), (singleKey + " Hi"), Toast.LENGTH_SHORT).show();
-//        Log.i("test", (singleKey + "HI"));
-//        Map userInfo = new HashMap<>();
-//        userInfo.put("contactName", contact);
-//        userInfo.put("contactDate", contact);
-//
-//        currentUserDB.updateChildren(userInfo);
-//
-//        Intent intent = new Intent(getActivity(), MainActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
-//        return;
     }
 
     @Override

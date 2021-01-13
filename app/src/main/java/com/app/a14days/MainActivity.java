@@ -22,6 +22,8 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import static com.app.a14days.Timer_14days.deleteOverdueContact;
+
 public class MainActivity extends AppCompatActivity {
 
     FragmentPagerAdapter adapterViewPager;
