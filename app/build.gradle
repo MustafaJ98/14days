@@ -46,10 +46,10 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.2'
 
     //CardView Dependencies
-    implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
-
+    //Permissions
+    implementation 'com.nabinbhandari.android:permissions:3.8'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

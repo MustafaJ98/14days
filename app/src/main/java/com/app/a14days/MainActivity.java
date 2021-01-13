@@ -32,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO : FIX Permissions
-        requestForCamera();
-
         // Swipe-able viewPager
         ViewPager viewPager = findViewById(R.id.ViewPager);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
@@ -75,22 +72,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void requestForCamera() {
-        Dexter.withContext(this).withPermission(Manifest.permission.CAMERA).withListener(new PermissionListener() {
-            @Override
-            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                return;
-            }
-
-            @Override
-            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                Toast.makeText(MainActivity.this , "Camera permission is required", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
-                permissionToken.continuePermissionRequest();
-            }
-        });
-    }
 }
