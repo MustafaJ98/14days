@@ -81,6 +81,7 @@ public class FireBaseContact {
                         Map contactInfo = new HashMap<>();
                         contactInfo.put("contactName", singleSearch.get("name"));
                         contactInfo.put("contactDate",  new Date().toString());
+                        contactInfo.put("covid_positive", false);
                         hostAddContactHere.updateChildren(contactInfo);
 
 
@@ -91,6 +92,7 @@ public class FireBaseContact {
                                 Map userInfo = new HashMap<>();
                                 userInfo.put("contactName", snapshot.getValue(String.class));
                                 userInfo.put("contactDate",  new Date().toString());
+                                userInfo.put("covid_positive", false);
                                 contactAddHostHere.updateChildren(userInfo);
 
                                 Log.i("User Name" , snapshot.getValue(String.class));

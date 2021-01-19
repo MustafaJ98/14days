@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.app.a14days.CovidCheckAndBroadcast.alertContacts;
 import static com.app.a14days.Timer_14days.deleteOverdueContact;
 
 public class ContactFragment extends Fragment {
@@ -40,6 +42,7 @@ public class ContactFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private Button addContactManually;
+    private Button alertAllContact;
 
     public static ContactFragment newInstance() {
         ContactFragment fragment = new ContactFragment();
@@ -83,6 +86,16 @@ public class ContactFragment extends Fragment {
                 return;
             }
         });
+
+        alertAllContact = view.findViewById(R.id.AlertContact);
+        alertAllContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertContacts();
+                Toast.makeText(getActivity(), "All contacts alerted", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         return view;
     }

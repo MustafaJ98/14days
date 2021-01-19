@@ -55,21 +55,37 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String email = mEmail.getText().toString();
                 final String password = mPassword.getText().toString();
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()) {
-                            FirebaseAuthException e = (FirebaseAuthException )task.getException();
-                            Toast.makeText(LoginActivity.this, "Failed Registration: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }else {
-                            Intent intent = new Intent(getApplication(), MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
-                            return;
+
+                if (email.isEmpty()) {
+                    mEmail.setError("Email required");
+                    mEmail.requestFocus();
+                }
+                else if (password.isEmpty()) {
+                    mPassword.setError("Password required");
+                    mPassword.requestFocus();
+                }
+                else{
+                    mlogin.setText("Logging in");
+
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (!task.isSuccessful()) {
+                                FirebaseAuthException e = (FirebaseAuthException )task.getException();
+                                Toast.makeText(LoginActivity.this, "Failed login: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                mlogin.setText("Login");
+
+                            } else {
+                                Intent intent = new Intent(getApplication(), MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                                return;
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
             }
         });
 

@@ -35,20 +35,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-//        firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                if (user != null) {
-//                    Intent intent = new Intent(getApplication(), MainActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    startActivity(intent);
-//                    finish();
-//                    return;
-//                }
-//            }
-//        };
-
         mAuth = FirebaseAuth.getInstance();
         mName = findViewById(R.id.name);
         mRegister = findViewById(R.id.Signup);
@@ -66,41 +52,43 @@ public class RegisterActivity extends AppCompatActivity {
                     mEmail.setError("Email required");
                     mEmail.requestFocus();
                 }
-                if (password.isEmpty()) {
+                else if (password.isEmpty()) {
                     mPassword.setError("Password required");
                     mPassword.requestFocus();
                 }
-                if (name.isEmpty()) {
+                 else if (name.isEmpty()) {
                     mName.setError("Username required");
                     mName.requestFocus();
                 }
+                 else{
 
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity.this , new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (!task.isSuccessful()) {
+                                FirebaseAuthException e = (FirebaseAuthException )task.getException();
+                                Toast.makeText(RegisterActivity.this, "Failed Registration: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                String userID = mAuth.getCurrentUser().getUid();
+                                DatabaseReference currentUserDB = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
 
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity.this , new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()) {
-                            FirebaseAuthException e = (FirebaseAuthException )task.getException();
-                            Toast.makeText(RegisterActivity.this, "Failed Registration: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            String userID = mAuth.getCurrentUser().getUid();
-                            DatabaseReference currentUserDB = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
+                                Map userInfo = new HashMap<>();
+                                userInfo.put("email", email);
+                                userInfo.put("name", name);
+                                //userInfo.put("ProfileImage",  "default");
 
-                            Map userInfo = new HashMap<>();
-                            userInfo.put("email", email);
-                            userInfo.put("name", name);
-                            //userInfo.put("ProfileImage",  "default");
+                                currentUserDB.updateChildren(userInfo);
 
-                            currentUserDB.updateChildren(userInfo);
-
-                            Intent intent = new Intent(getApplication(), MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
-                            return;
+                                Intent intent = new Intent(getApplication(), MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                                return;
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
             }
         });
 

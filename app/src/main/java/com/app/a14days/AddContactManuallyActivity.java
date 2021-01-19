@@ -51,6 +51,7 @@ public class AddContactManuallyActivity extends AppCompatActivity {
                Map contactInfo = new HashMap<>();
                contactInfo.put("contactName", name);
                contactInfo.put("contactDate",  new Date().toString());
+               contactInfo.put("covid_positive", false);
                hostAddContactHere.updateChildren(contactInfo);
 
                startNewActivity();

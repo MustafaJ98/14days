@@ -48,9 +48,6 @@ public class RecyclerView_Config {
             this.key = key;
         }
 
-        private String calculateRemainingDays() {
-            return "14";
-        }
     }
     class ContactAdapter extends RecyclerView.Adapter<ContactItemView>{
         private List<Contact> contacts;
