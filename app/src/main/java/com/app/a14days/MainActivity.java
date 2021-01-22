@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Start Service to track contacts
+        Intent intent = new Intent(this,  CovidCheckAndBroadcast.class);
+        startService(intent);
+
         // Swipe-able viewPager
         ViewPager viewPager = findViewById(R.id.ViewPager);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
