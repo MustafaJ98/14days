@@ -1,6 +1,7 @@
 package com.app.a14days;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -91,8 +93,19 @@ public class ContactFragment extends Fragment {
         alertAllContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertContacts();
-                Toast.makeText(getActivity(), "All contacts alerted", Toast.LENGTH_SHORT).show();
+                // create a confirmation prompt
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Alert all contacts of positive COVID test?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                alertContacts();
+                                Toast.makeText(getActivity(), "All contacts alerted", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null);
+                AlertDialog confirmation = builder.create();
+                confirmation.show();
             }
         });
 
