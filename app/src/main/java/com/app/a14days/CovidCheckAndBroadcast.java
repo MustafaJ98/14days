@@ -1,12 +1,19 @@
 package com.app.a14days;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -23,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CovidCheckAndBroadcast extends Service {
+    public Context context = this;
     @Override
     public void onCreate() {
 //        HandlerThread thread = new HandlerThread("ServiceStartArguments",
@@ -36,7 +44,7 @@ public class CovidCheckAndBroadcast extends Service {
         return START_STICKY;
     }
 
-    public static void checkPositive(){
+    public void checkPositive(){
         String userID;
         DatabaseReference currentUserDB;
         DatabaseReference contact;
@@ -52,7 +60,6 @@ public class CovidCheckAndBroadcast extends Service {
         contact.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             @Override
@@ -60,7 +67,7 @@ public class CovidCheckAndBroadcast extends Service {
                 String key = snapshot.getKey();
                 Contact singleContact = snapshot.getValue(Contact.class);
                 if( singleContact.isCovid_positive()) {
-                    alertCurrentUser(singleContact.getContactName());
+                    alertCurrentUser(singleContact);
                 }
             }
 
@@ -80,29 +87,46 @@ public class CovidCheckAndBroadcast extends Service {
             }
         });
 
-//        contact.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                for ( DataSnapshot KeyNode: snapshot.getChildren() ){
-//                    String key = KeyNode.getKey();
-//                    Contact singleContact = KeyNode.getValue(Contact.class);
-//                    if( singleContact.isCovid_positive()) {
-//                        alertCurrentUser(singleContact.getContactName());
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.e("Contact", error.toString());
-//
-//            }
-//        });
     }
 
-    private static void alertCurrentUser(String contactName) {
-        Log.i("broadcast", contactName + " tested postive for COVID");
+    private void alertCurrentUser(Contact contact) {
+        Log.i("broadcast", contact.getContactName() + " tested positive for COVID");
+
+        String message = " One of your contacts has tested positive for COIVD";
+        NotificationCompat.Builder builder =new NotificationCompat.Builder(context);
+        builder.setSmallIcon(R.drawable.user_alert)
+                .setContentTitle("Important notification")
+                .setContentText(message)
+                .setAutoCancel(true);
+
+        Intent intent = new Intent(context, NotificationActivity.class);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("contactName", contact.getContactName());
+        intent.putExtra("contactDate", contact.getContactDate());
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            String channelId = "14days";
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(channel);
+            builder.setChannelId(channelId);
+        }
+
+        notificationManager.notify( 0, builder.build());
+
+       // startActivity(intent);
+
+//        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+//        notificationManagerCompat.notify(0, builder.build());
     }
 
     public static void alertContacts(){
@@ -124,7 +148,6 @@ public class CovidCheckAndBroadcast extends Service {
 
                 for ( DataSnapshot KeyNode: snapshot.getChildren() ){
                     String key = KeyNode.getKey();
-                    Contact singleContact = KeyNode.getValue(Contact.class);
                     DatabaseReference contactSetHostPostive = users.child(key).child("contact").child(userID).child("covid_positive");
                     contactSetHostPostive.setValue(true);
                 }

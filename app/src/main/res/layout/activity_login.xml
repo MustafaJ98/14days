@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
-    android:orientation="vertical">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".LoginActivity">
 
     <EditText
         android:id="@+id/Email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:hint="Email"
 
         />
@@ -19,14 +21,22 @@
         android:id="@+id/Password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:hint="Password"
         android:inputType="textPassword" />
 
     <Button
+        android:id="@+id/Login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/Login"
-        />
+        android:layout_marginTop="10dp"
+        android:text="Login" />
 
+    <TextView
+        android:id="@+id/forgotPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Forgot password?"
+        android:textColorHighlight="#FFFFFFFF" />
 </LinearLayout>

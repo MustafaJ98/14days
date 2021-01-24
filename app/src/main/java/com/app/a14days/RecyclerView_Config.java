@@ -1,6 +1,7 @@
 package com.app.a14days;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,9 @@ public class RecyclerView_Config {
 
         public void bind(Contact contact, String key){
             myContactName.setText(contact.getContactName());
+            if (contact.isCovid_positive()) {
+                myContactName.setTextColor(Color.RED);
+            }
             myContactDate.setText(contact.getContactDate());
             String remainingDays = calculateRemainingTime(contact.getContactDate());
             myRemainingDays.setText(remainingDays);

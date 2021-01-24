@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <EditText
@@ -17,6 +18,7 @@
         android:id="@+id/Email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:hint="Email" />
 
     <EditText
@@ -24,12 +26,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="Password"
+        android:layout_marginTop="10dp"
         android:inputType="textPassword" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign up"
+        android:layout_marginTop="10dp"
         android:id="@+id/Signup"
         />
 

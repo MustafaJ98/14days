@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +22,7 @@ import java.util.concurrent.Executor;
 
 public class LoginActivity extends AppCompatActivity {
     private Button mlogin;
+    private TextView mForgotPassword;
     private EditText mName, mEmail, mPassword;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
@@ -30,30 +32,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-//        firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//            if (user != null) {
-//                Toast.makeText(LoginActivity.this , "Logging in", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getApplication(), MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-//                finish();
-//                return;
-//            }
-//            }
-//        };
-
         mAuth = FirebaseAuth.getInstance();
         mlogin = findViewById(R.id.Login);
         mEmail= findViewById(R.id.Email);
         mPassword = findViewById(R.id.Password);
+        mForgotPassword = findViewById(R.id.forgotPassword);
 
         mlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = mEmail.getText().toString();
+                final String email = mEmail.getText().toString().trim();
                 final String password = mPassword.getText().toString();
 
                 if (email.isEmpty()) {
@@ -65,8 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                     mPassword.requestFocus();
                 }
                 else{
-                    mlogin.setText("Logging in");
-
+                    mlogin.setText("Logging in...");
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -88,7 +75,17 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
+        
+        mForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {Intent intent = new Intent(getApplication(), ForgotPasswordActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                return;
+            }
+        });
+        
     }
 
     @Override
