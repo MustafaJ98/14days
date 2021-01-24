@@ -44,17 +44,20 @@ public class AddContactManuallyActivity extends AppCompatActivity {
            public void onClick(View v) {
                final String name = mName.getText().toString();
                if (name.isEmpty()) {
-                   mName.setError("Email required");
+                   mName.setError("Name required");
                    mName.requestFocus();
                }
-               DatabaseReference hostAddContactHere = contact.child(new Date().toString());
-               Map contactInfo = new HashMap<>();
-               contactInfo.put("contactName", name);
-               contactInfo.put("contactDate",  new Date().toString());
-               contactInfo.put("covid_positive", false);
-               hostAddContactHere.updateChildren(contactInfo);
+               else{
+                   DatabaseReference hostAddContactHere = contact.child(new Date().toString());
+                   Map contactInfo = new HashMap<>();
+                   contactInfo.put("contactName", name);
+                   contactInfo.put("contactDate",  new Date().toString());
+                   contactInfo.put("covid_positive", false);
+                   hostAddContactHere.updateChildren(contactInfo);
 
-               startNewActivity();
+                   startNewActivity();
+               }
+
            }
        });
     }
