@@ -20,7 +20,7 @@ public class NotificationActivity extends AppCompatActivity {
         String contactDate = intent.getStringExtra("contactDate");
 
         mText = findViewById(R.id.covidContact);
-        String message = "One of your contacts, " + contactName + " who you meet on:\n" + contactDate + "\nhas tested positive for COVID."
+        String message = "One of your contacts, " + contactName + " who you met on:\n" + contactDate + "\nhas tested positive for COVID."
                 + "\nPlease take necessary precautions.";
         mText.setText(message);
     }

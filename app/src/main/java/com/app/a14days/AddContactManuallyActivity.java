@@ -48,7 +48,7 @@ public class AddContactManuallyActivity extends AppCompatActivity {
                    mName.requestFocus();
                }
                else{
-                   DatabaseReference hostAddContactHere = contact.child(new Date().toString());
+                   DatabaseReference hostAddContactHere = contact.child( userID + new Date().toString());
                    Map contactInfo = new HashMap<>();
                    contactInfo.put("contactName", name);
                    contactInfo.put("contactDate",  new Date().toString());

@@ -148,13 +148,12 @@ public class CovidCheckAndBroadcast extends Service {
 
                 for ( DataSnapshot KeyNode: snapshot.getChildren() ){
                     String key = KeyNode.getKey();
-                    DatabaseReference dbContact = users.child(key);
 
-                    dbContact.addValueEventListener(new ValueEventListener() {
+                    users.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()){
-                                DatabaseReference contactSetHostPostive =  dbContact.child("contact").child(userID).child("covid_positive");
+                            if (snapshot.hasChild(key)){
+                                DatabaseReference contactSetHostPostive =  users.child(key).child("contact").child(userID).child("covid_positive");
                                 contactSetHostPostive.setValue(true);
                             }
                         }
@@ -164,7 +163,6 @@ public class CovidCheckAndBroadcast extends Service {
 
                         }
                     });
-
                 }
             }
 
